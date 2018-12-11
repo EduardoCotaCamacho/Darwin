@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Proveedores">
+
+    <resultMap id="ResultUnidadID" type="Integer">
+        <result property="value" column="id"/>
+    </resultMap>
+
+    <resultMap id="ResultUnidad" type="Unidad">
+        <result property="id" column="id"/>
+        <result property="nombre" column="nombre"/>
+    </resultMap>
+
+    <select id="UnidadSelectMaxID" resultMap="ResultUnidadID">
+        SELECT max(id)+1 as id
+        FROM unidad 
+    </select>
+    
+    <insert id="UnidadInsert" parameterType="Unidad" useGeneratedKeys="true" keyProperty="id">
+
+        INSERT INTO unidad 
+        (nombre)
+        VALUES
+        (#{nombre})
+        
+        <selectKey keyProperty="id" resultType="Integer" order="AFTER" > 
+              SELECT MAX(id) FROM unidad 
+        </selectKey>
+    </insert>
+    
+    <update id="UnidadUpdate" parameterType="Unidad">
+        UPDATE unidad 
+        SET nombre = #{nombre}} 
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="UnidadDelete" parameterType="map">
+        DELETE FROM unidad 
+        WHERE id = #{id}
+    </delete>
+    
+    <select id="UnidadWhere" parameterType="String" resultMap="ResultUnidad">
+        SELECT *
+        FROM unidad 
+        ${where} 
+        ${group} 
+        ${order}
+    </select>
+    
+    <select id="UnidadSelect" resultMap="ResultUnidad">
+        SELECT *
+        FROM unidad 
+    </select>
+
+</mapper>
